@@ -46,6 +46,17 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            yum install ncurses-devel
+            wget http://http.debian.net/debian/pool/main/d/dpkg/dpkg_1.18.10.tar.xz
+            tar xvf dpkg_1.18.10.tar.xz
+            cd dpkg-1.18.10
+            ./configure
+            make
+            make install
+            yum install cpan
+            cpan install Dpkg
+            cat /etc/profile.d/perl5lib.sh
+            export PERL5LIB=$PERL5LIB:/usr/local/share/perl5/vendor_perl
             wget http://security.ubuntu.com/ubuntu/pool/main/a/apt/apt_2.3.13_i386.deb
             sudo dpkg -i apt*
             sudo apt-get update
