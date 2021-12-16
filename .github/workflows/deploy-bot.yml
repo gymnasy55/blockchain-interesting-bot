@@ -46,6 +46,7 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            wget http://security.ubuntu.com/ubuntu/pool/main/a/apt/apt_2.3.13_i386.deb
             sudo apt-get update
             sudo apt-get upgrade
             sudo apt-get install python-software-properties
