@@ -15,7 +15,7 @@ jobs:
         run: touch .env
 
       - name: Write environment to .env file
-        run: echo "${{ secrets.ENVIRONMENT }}" >> .env
+        run: echo "${{ secrets.ENVIRONMENT }}" > .env
 
       - name: Deploy to AWS
         uses: easingthemes/ssh-deploy@main
