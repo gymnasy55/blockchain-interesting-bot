@@ -11,57 +11,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install Node.js
-        uses: actions/setup-node@master
-        with:
-          node-version: '16.x'
-
-      - name: Install dependencies
-        run: npm install
-
       - name: Create .env file
-        run: mkdir dist && touch dist/.env
+        run: .env
 
       - name: Write environment to .env file
-        run: echo ${{ secrets.ENVIRONMENT }} >> dist/.env
-
-      - name: Run build task
-        run: npm run build
+        run: echo ${{ secrets.ENVIRONMENT }} >> .env
 
       - name: Deploy to AWS
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
           ARGS: "-rltgoDzvO --delete"
-          SOURCE: "dist/"
+          SOURCE: "./"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
-          EXCLUDE: "/dist/, /node_modules/"
-
-      - name: Install Node.js on AWS
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            sudo yum install ncurses-devel
-            sudo wget http://http.debian.net/debian/pool/main/d/dpkg/dpkg_1.18.10.tar.xz
-            sudo tar xvf dpkg_1.18.10.tar.xz
-            sudo cd dpkg-1.18.10
-            ./configure
-            make
-            make install
-            sudo yum install cpan
-            sudo cpan install Dpkg
-            wget http://security.ubuntu.com/ubuntu/pool/main/a/apt/apt_2.3.13_i386.deb
-            sudo dpkg -i apt*
-            sudo apt-get update
-            sudo apt-get upgrade
-            sudo apt-get install python-software-properties
-            curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash –
-            sudo apt-get install nodejs
+          EXCLUDE: "/node_modules/"
 
       - name: Run bot
         uses: appleboy/ssh-action@master
@@ -69,6 +34,4 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            cd bot
-            node index.js
+          script: docker-compose up
