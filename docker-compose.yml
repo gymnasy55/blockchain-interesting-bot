@@ -6,7 +6,7 @@ services:
     build:
       context: .
     env_file:
-      - .env
+      - ./.env
     volumes:
     - .:/app
     - /app/node_modules
