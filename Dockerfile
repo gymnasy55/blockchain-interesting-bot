@@ -4,5 +4,5 @@ COPY ./package.json ./
 COPY ./tsconfig.json ./
 COPY ./src ./src
 RUN npm install
-RUN npm build
+RUN npm run build
 CMD npm run start:prod
