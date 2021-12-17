@@ -35,5 +35,5 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-          cd bot
-          docker-compose up
+            cd bot
+            docker-compose up
